@@ -35,5 +35,5 @@ jobs:
       run: npm install -g surge
 
     - name: Deploy to Surge
-      run: surge ./build bootcamp2020_hammadurrehmanclass3.surge.sh --token ${{secrets.SURGE_TOKEN}}
+      run: surge ./build bootcamp2020_hammadurrehman_class3.surge.sh --token ${{secrets.SURGE_TOKEN}}
            
