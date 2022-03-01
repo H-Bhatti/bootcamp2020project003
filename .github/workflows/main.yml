@@ -1,12 +1,17 @@
 # This is a basic workflow to help you get started with Actions
 
-name: ReactDeploymentSurgeclass3
+name: React App Deploy to Surge
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# Controls when the action will run. 
 on:
+  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ master ]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -17,23 +22,26 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-    
-    - name: Install NodeJS
-      uses: actions/setup-node@v2-beta
-      with:
-        node-version: 14
-
-    - name: Install packages JS
-      run: npm install
-        
-    - name: Build React App
-      run: npm run build
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
       
-    - name: Install Surge
-      run: npm install -g surge
+      - name: Install NodeJS
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12
+        
+      - name: Github action for yarn
+        uses: Borales/actions-yarn@v2.1.0
+        with:
+          cmd: install # will run `yarn install` command
+          
+      - name: Build React App
+        run: sudo yarn build
+          
+      - name: Install Surge
+        run: npm install --global surge
+        
+      - name: Deploy to Surge
+        run: surge ./build bootcamp2020_hammadurrehman_class3.surge.sh --token ${{secrets.SURGE_TOKEN}}
 
-    - name: Deploy to Surge
-      run: surge ./build bootcamp2020_hammadurrehman_class3.surge.sh --token ${{secrets.SURGE_TOKEN}}
-           
+  
